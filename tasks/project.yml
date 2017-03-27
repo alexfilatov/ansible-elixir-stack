@@ -1,5 +1,8 @@
 ---
 - name: "clone project"
+  become: yes
+  become_user: deployer
+  become_method: sudo
   git:
     repo: "{{ repo_url }}"
     version: "{{ git_ref }}"
