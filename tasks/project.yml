@@ -51,6 +51,7 @@
 
 - when: custom_prod_secret_template.stat.exists == False
   name: add prod.secret.exs from default template
+  sudo: no
   template:
     src: default-prod.secret.exs.j2
     dest: "{{ project_path }}/config/prod.secret.exs"
@@ -59,6 +60,7 @@
 
 - when: custom_prod_secret_template.stat.exists == True
   name: add prod.secret.exs from custom template provided
+  sudo: no
   template:
     src: templates/prod.secret.exs.j2
     dest: "{{ project_path }}/config/prod.secret.exs"
