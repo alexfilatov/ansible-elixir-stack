@@ -10,6 +10,7 @@
 
 
 - name: "add asdf plugins"
+  ignore_errors: yes
   command: "bash -lc 'asdf plugin-add {{item}} https://github.com/HashNuke/asdf-{{item}}.git'"
   with_items:
     - nodejs
