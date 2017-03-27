@@ -7,6 +7,8 @@
     accept_hostkey: True
     force: True
   remote_user: "{{ deployer }}"
+  tags:
+    - clone_project
 
 
 - name: "install tool versions"
