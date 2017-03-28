@@ -3,6 +3,7 @@
   become: yes
   become_user: deployer
   become_method: sudo
+
   git:
     repo: "{{ repo_url }}"
     version: "{{ git_ref }}"
@@ -15,6 +16,9 @@
 
 
 - name: "install tool versions"
+  become: yes
+  become_user: deployer
+  become_method: sudo
   command: bash -lc 'asdf install' chdir="{{ project_path }}"
   async: 1800
   remote_user: "{{ deployer }}"
@@ -50,6 +54,8 @@
 - name: check if custom template for prod.secret.exs exists
   local_action: stat path="templates/prod.secret.exs.j2"
   register: custom_prod_secret_template
+  tags:
+    - check_prod_secret
 
 
 - when: custom_prod_secret_template.stat.exists == False
@@ -84,16 +90,29 @@
 
 
 - name: install hex
+  become: yes
+  become_user: deployer
+  become_method: sudo
   command: bash -lc "mix local.hex --force" chdir="{{ project_path }}"
   remote_user: "{{ deployer }}"
+  tags:
+    - install_hex
 
 
 - name: install rebar
+  become: yes
+  become_user: deployer
+  become_method: sudo
   command: bash -lc "mix local.rebar --force" chdir="{{ project_path }}"
   remote_user: "{{ deployer }}"
+  tags:
+    - install_rebar
 
 
 - name: "fetch mix dependencies"
+  become: yes
+  become_user: deployer
+  become_method: sudo
   command: bash -lc 'mix deps.get' chdir="{{ project_path }}"
   async: 900
   remote_user: "{{ deployer }}"
